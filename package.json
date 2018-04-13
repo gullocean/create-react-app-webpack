@@ -48,7 +48,7 @@
   },
   "scripts": {
     "build-css": "node-sass src/assets/styles/index.scss -o src/",
-    "watch-css": "yarn build-css && node-sass src/assets/styles/index.scss -o src/ --watch --recursive",
+    "watch-css": "yarn build-css && node-sass src/assets/styles/ -o src/ --watch --recursive",
     "start-js": "node scripts/start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "yarn build-css && node scripts/build",
