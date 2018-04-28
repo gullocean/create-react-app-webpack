@@ -22,7 +22,7 @@ class App extends Component {
             content: 'website'
           }, {
             property: 'og:image',
-            content: logo
+            content: `${process.env.PROTOCOL}://${process.env.HOST || `localhost:${process.env.PORT || 3000}`}/static/images/download.jpeg`
           }, {
             property: 'og:url',
             content: `${process.env.PROTOCOL}://${process.env.HOST || `localhost:${process.env.PORT || 3000}`}`
