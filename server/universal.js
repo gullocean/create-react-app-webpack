@@ -16,38 +16,46 @@ module.exports = function universalLoader(req, res) {
   process.env.HOST = req.headers.host
   process.env.PROTOCOL = req.protocol
 
-  const context = {}
-  const store = configureStore()
-  const markup = renderToString(
-    <Provider store={store}>
-      <StaticRouter
-        location={req.url}
-        context={context}
-      >
-        <App/>
-      </StaticRouter>
-    </Provider>
-  )
-  const helmet = Helmet.renderStatic()
-  const html = `
-    <!doctype html>
-    <html ${helmet.htmlAttributes.toString()}>
-      <head>
-        ${helmet.title.toString()}
-        ${helmet.meta.toString()}
-        ${helmet.link.toString()}
-      </head>
-      <body ${helmet.bodyAttributes.toString()}>
-        <div id="app">${markup}</div>
-      </body>
-    </html>
-  `
+  fs.readFile(filePath, 'utf8', (err, htmlData)=>{
+    if (err) {
+      console.error('read err', err)
+      return res.status(404).end()
+    }
+    const context = {}
+    const store = configureStore()
+    const markup = renderToString(
+      <Provider store={store}>
+        <StaticRouter
+          location={req.url}
+          context={context}
+        >
+          <App/>
+        </StaticRouter>
+      </Provider>
+    )
+    const helmet = Helmet.renderStatic()
+    const head = htmlData.match(/<head[^>]*>[\s\S]*<\/head>/gi)
+    const html = `
+      <!doctype html>
+      <html ${helmet.htmlAttributes.toString()}>
+        <head>
+          ${helmet.title.toString()}
+          ${helmet.meta.toString()}
+          ${helmet.link.toString()}
+          ${head.length > 0 ? head[0].replace('<head>', '').replace('</head>', '') : ''}
+        </head>
+        <body ${helmet.bodyAttributes.toString()}>
+          <div id="app">${markup}</div>
+        </body>
+      </html>
+    `
 
-  if (context.url) {
-    // Somewhere a `<Redirect>` was rendered
-    res.redirect(301, context.url)
-  } else {
-    res.send(html)
-  }
+    if (context.url) {
+      // Somewhere a `<Redirect>` was rendered
+      res.redirect(301, context.url)
+    } else {
+      res.send(html)
+    }
+  })
 }
 
