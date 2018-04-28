@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet'
 
 import logo from './logo.svg';
 
+import './index.css';
+
 class App extends Component {
   render() {
     return (
