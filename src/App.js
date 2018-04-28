@@ -29,6 +29,12 @@ class App extends Component {
           }, {
             property: 'og:description',
             content: 'description'
+          }, {
+            property: 'og:image:width',
+            content: '300'
+          }, {
+            property: 'og:image:height',
+            content: '300'
           }]}
         />
 
