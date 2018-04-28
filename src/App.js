@@ -31,10 +31,10 @@ class App extends Component {
             content: 'description'
           }, {
             property: 'og:image:width',
-            content: '300'
+            content: '525'
           }, {
             property: 'og:image:height',
-            content: '300'
+            content: '350'
           }]}
         />
 
