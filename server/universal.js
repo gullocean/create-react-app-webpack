@@ -33,22 +33,19 @@ module.exports = function universalLoader(req, res) {
         </StaticRouter>
       </Provider>
     )
+    const regHead = /<head[^>]*>[\s\S]*<\/head>/gi
     const helmet = Helmet.renderStatic()
-    const head = htmlData.match(/<head[^>]*>[\s\S]*<\/head>/gi)
-    const html = `
-      <!doctype html>
-      <html ${helmet.htmlAttributes.toString()}>
-        <head>
-          ${helmet.title.toString()}
-          ${helmet.meta.toString()}
-          ${helmet.link.toString()}
-          ${head.length > 0 ? head[0].replace('<head>', '').replace('</head>', '') : ''}
-        </head>
-        <body ${helmet.bodyAttributes.toString()}>
-          <div id="app">${markup}</div>
-        </body>
-      </html>
-    `
+    const originHead = htmlData.match(regHead)[0]
+    let html = htmlData.replace(regHead, `
+      <head>
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
+        ${originHead.replace('<head>', '').replace('</head>', '')}
+      </head>
+    `)
+    html = html.replace('<html>', `<html ${helmet.htmlAttributes.toString()}>`)
+    html = html.replace('<body>', `<body ${helmet.bodyAttributes.toString()}>`)
 
     if (context.url) {
       // Somewhere a `<Redirect>` was rendered
