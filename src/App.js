@@ -35,6 +35,9 @@ class App extends Component {
           }, {
             property: 'og:image:height',
             content: '350'
+          }, {
+            property: 'fb:app_id',
+            content: process.env.FACEBOOK_APP_ID
           }]}
         />
 
