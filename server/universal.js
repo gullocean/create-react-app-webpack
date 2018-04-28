@@ -13,6 +13,9 @@ const {default: App} = require('./../src/App')
 module.exports = function universalLoader(req, res) {
   const filePath = path.resolve(__dirname, '..', 'build', 'index.html')
 
+  process.env.HOST = req.headers.host
+  process.env.PROTOCOL = req.protocol
+
   const context = {}
   const store = configureStore()
   const markup = renderToString(
